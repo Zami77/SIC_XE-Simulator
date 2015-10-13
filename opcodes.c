@@ -2,12 +2,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "functions.h"
 
-typedef struct opcode {
-	int opcodeNum;
-	char *code;
-	struct opcode *next;
-} opcode;
+
 
 opcode *head = NULL;
 opcode *curr = NULL;
@@ -15,7 +12,7 @@ opcode *curr = NULL;
 
 struct opcode* createOpcodeList(char* code,int opcodeNum)
 {
-	printf("Beggining opcode linked list...\n");
+	//printf("Beggining opcode linked list...\n");
 	struct opcode *op = (struct opcode*)malloc(sizeof(struct opcode));
 
 	if(NULL == op)
@@ -37,7 +34,7 @@ struct opcode* createOpcodeList(char* code,int opcodeNum)
 
 struct opcode* addOpcode(char* code,int opcodeNum)
 {
-	printf("\n--Adding Node--\nAD:%s\tOP:%x\n",code,opcodeNum);
+	//printf("\n--Adding Node--\nAD:%s\tOP:%x\n",code,opcodeNum);
 	if(head == NULL)
 	{
 		return (createOpcodeList(code,opcodeNum));
@@ -69,14 +66,14 @@ struct opcode* searchOpcode(char* code)
 	if(code == NULL)
 		return NULL;
 	
-	printf("\nSearching for %s...\n",code);
+	//printf("\nSearching for %s...\n",code);
 
 	while(ptr != NULL)
 	{
 		
 		if((strcmp(code,ptr->code)) == 0)
 		{
-			printf("\n%s has been found...\n",code);
+			//printf("\n%s has been found...\n",code);
 			return ptr;
 		}
 		else
@@ -85,7 +82,7 @@ struct opcode* searchOpcode(char* code)
 		}
 	}
 
-	printf("\nOpcode has not been found...\n");
+	//printf("\nOpcode has not been found...\n");
 	return NULL;
 			
 }
@@ -163,4 +160,5 @@ char* returnCode(struct opcode *op)
 {
 	return op->code;
 }
+
 

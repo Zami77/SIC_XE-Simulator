@@ -5,14 +5,18 @@
 
 void lineByLine(FILE*);
 void populateOpcode(FILE*);
+int isAD(char*);
+void symbolAddresses(FILE*);
 
 void lineByLine(FILE *fp)
 {
 	char str[80];
 	const char s[2] = " ";
 	char *token;
+	lineNum = 1;
 	
 	struct opcode *op1 = (struct opcode*)malloc(sizeof(struct opcode));
+	struct symbol *sym1 = (struct symbol*)malloc(sizeof(struct symbol));
 
 	printf("\nLINE\tLOC\t\tSource Statement\t\tObject Code\n");
 	printf("----\t---\t\t----------------\t\t-----------\n");
@@ -35,7 +39,7 @@ void lineByLine(FILE *fp)
 	//END FIRST LINE----------------------------------------
 
 	//loop to cycle through the file and parse every word seperated by a space
-	//via the token constant
+	//via the token constant. Retrieves both Mnemonics and Symbols
 	while(fgets(str,80,fp) != NULL)
 	{
 		printf("%d   \t",(lineNum)*5);//Line number multiples of 5
@@ -45,10 +49,18 @@ void lineByLine(FILE *fp)
 
 		token = strtok(str,s);
 
+		
+
 		op1 = searchOpcode(token);
+		sym1 = searchSymbols(token);
 		if(op1 != NULL)
 		{
 			lineOp[lineNum] = (returnOpcode(op1)) << 16;
+		}
+		
+		else if((sym1 == NULL) && (isAD(token) == 0))
+		{
+			addSymbol(token,0);
 		}
 		op1 = NULL;
 		
@@ -57,12 +69,19 @@ void lineByLine(FILE *fp)
 			printf("%s ",token);
 			token = strtok(NULL,s);
 			op1 = searchOpcode(token);
+			sym1 = searchSymbols(token);
 
 			if(op1 != NULL)
 			{
-				printf("\n***[AD:%s\tOP:%x\t]***\n",returnCode(op1),returnOpcode(op1));
+				//printf("\n***[AD:%s\tOP:%x\t]***\n",returnCode(op1),returnOpcode(op1));
 				lineOp[lineNum] = (returnOpcode(op1)) << 16;
 			}
+			
+			else if((sym1 == NULL) && (isAD(token) == 0))
+			{
+				addSymbol(token,0);
+			}
+			
 		}
 		
 		lineNum++;
@@ -90,4 +109,62 @@ void populateOpcode(FILE *fp)
 		addOpcode(code,op);
 
 	}
+}
+
+void symbolAddresses(FILE *fp)
+{
+	char str[80];
+	const char s[2] = " ";
+	char *token;
+	lineNum = 1;
+	struct symbol *sym1 = (struct symbol*)malloc(sizeof(struct symbol));
+
+	while(fgets(str,80,fp) != NULL)
+	{
+		token = strtok(str,s);
+		sym1 = searchSymbols(token);
+		if(sym1 != NULL)
+		{
+			setAddress(sym1,lineLoc[lineNum]);
+			lineOp[lineNum] = lineOp[lineNum] | lineLoc[lineNum];
+		}
+		while(token != NULL)
+		{
+			token = strtok(NULL,s);
+			sym1 = searchSymbols(token);
+			if(sym1 != NULL)
+			{
+				setAddress(sym1,lineLoc[lineNum]);
+				lineOp[lineNum] = lineOp[lineNum] | lineLoc[lineNum];
+			}
+		}
+		lineNum++;
+	}
+
+}
+
+int isAD(char* word)
+{
+	char *token;
+	const char s[2] = " ";
+	
+	
+	token = strtok(assemblyDirectives,s);
+	
+	if((word == NULL) || (token == NULL))
+		return 0;
+	if(strcmp(token,word) == 0)
+		return 1;
+
+	while(token != NULL)
+	{
+		token = strtok(NULL,s);
+
+		if(token != NULL)
+		{
+			if(strcmp(token,word) == 0)
+				return 1;
+		}
+	}
+	return 0;
 }

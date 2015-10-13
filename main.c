@@ -4,12 +4,14 @@
 
 int main(void)
 {
-	FILE *progFile,*outputFile,*opcode;
+	FILE *progFile,*outputFile,*opcode,*ADFile;
 	
 	progFile = fopen("input.txt","r");
 	opcode = fopen("opcode.txt","r");
-	outputFile = fopen("outputFile.txt", "w");
+	outputFile = fopen("obj.o", "w");
+	ADFile = fopen("AssemblyDirectives.txt","r");
 	
+	fgets(assemblyDirectives,30,ADFile);
 
 	
 	//int hexTest = 0x16;
@@ -18,14 +20,15 @@ int main(void)
 	//unsigned int opcodeTest = hexTest | hexLocTest;
 	//printf("Opcode Test:%x",opcodeTest);
 	populateOpcode(opcode);
-	printf("\n\n-------------------------------------------------\n\n");
+	//printf("\n\n-------------------------------------------------\n\n");
 	lineByLine(progFile);
-	int i = 0;
-	for(i = 1; i < lineNum; i++)
-	{
-		printf("\nLoc:%x\tOp:%.6x",lineLoc[i],lineOp[i]);
-	}
-
+	//addSymbol("A",0x1003);
+	//addSymbol("B",0x1006);
+	//int isSym = isSymbol("A");
+	//if(isSym)
+		//printf("This should print out\n");
+	symbolAddresses(progFile);
+	printSymbolTable();
 	fclose(progFile);
 	fclose(outputFile);
 	fclose(opcode);
