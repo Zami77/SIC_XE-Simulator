@@ -168,9 +168,12 @@ void setSymbolAddresses(FILE *fp)
 		}
 		if(getAddress(thirdWord)>0)
 		{
-			printf("%s is a symbol\n",secondWord);
+			printf("%s is a symbol\n",thirdWord);
 			lineOp[lineNum] = lineOp[lineNum] | getAddress(thirdWord);
 		}
+		if((thirdWord[0] == 'C') && (thirdWord[1] == 39))
+			lineOp[lineNum] = lineOp[lineNum] | thirdWord[2];
+
 		
 		printf("\nLINE %d\n",lineNum);
 		lineNum++;
