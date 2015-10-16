@@ -2,6 +2,8 @@ void lineByLine(FILE *fp);
 void populateOpcode(FILE*);
 int isAD(char* word);
 void symbolAddresses(FILE *fp);
+void writeObjFile(FILE *input,FILE *output);
+void setSymbolAddresses(FILE *fp);
 
 typedef struct opcode {
 	int opcodeNum;
@@ -29,11 +31,15 @@ struct symbol* searchSymbols(char* symName);
 void printSymbolTable(void);
 int isSymbol(char* symName);
 void setAddress(struct symbol *sym,int ad);
-
+struct symbol* getPrev(struct symbol *sym);
+int sameSymbol(struct symbol *sym1,struct symbol *sym2);
+void deleteSymbol(char* symName);
+int getAddress(char* symName);
 
 int lineLoc[1000];
 int lineOp[1000];
 int lineNum;
 int startLocation;
+int symbolCount;
 char *progName;
 char assemblyDirectives[30];

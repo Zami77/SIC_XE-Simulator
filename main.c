@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "functions.h"
 
 int main(void)
@@ -20,15 +21,23 @@ int main(void)
 	//unsigned int opcodeTest = hexTest | hexLocTest;
 	//printf("Opcode Test:%x",opcodeTest);
 	populateOpcode(opcode);
-	//printf("\n\n-------------------------------------------------\n\n");
+
+	
 	lineByLine(progFile);
-	//addSymbol("A",0x1003);
-	//addSymbol("B",0x1006);
-	//int isSym = isSymbol("A");
-	//if(isSym)
-		//printf("This should print out\n");
+	
+	rewind(progFile);
 	symbolAddresses(progFile);
+	
+
 	printSymbolTable();
+
+	rewind(progFile);
+	setSymbolAddresses(progFile);
+	
+
+	
+	rewind(progFile);
+	writeObjFile(progFile,outputFile);
 	fclose(progFile);
 	fclose(outputFile);
 	fclose(opcode);
