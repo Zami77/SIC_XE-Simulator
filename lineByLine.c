@@ -172,7 +172,7 @@ void setSymbolAddresses(FILE *fp)
 			lineOp[lineNum] = lineOp[lineNum] | getAddress(thirdWord);
 		}
 		if((thirdWord[0] == 'C') && (thirdWord[1] == 39))
-			lineOp[lineNum] = lineOp[lineNum] | thirdWord[2];
+			lineOp[lineNum] = thirdWord[2] << 16;
 
 		
 		printf("\nLINE %d\n",lineNum);
