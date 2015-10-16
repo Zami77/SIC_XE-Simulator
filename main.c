@@ -35,7 +35,7 @@ int main(void)
 	setSymbolAddresses(progFile);
 	
 
-	
+	lineOp[lineNum-1] = 0;//End of the file has a 0x00 opcode
 	rewind(progFile);
 	writeObjFile(progFile,outputFile);
 	fclose(progFile);
